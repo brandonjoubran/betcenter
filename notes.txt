@@ -1,0 +1,43 @@
+Get a team's id: 
+ - "https://www.balldontlie.io/api/v1/teams" and loop through. Can even hardcode maybe? Cache?
+
+Get today's matchups:
+ - Loop through "https://www.balldontlie.io/api/v1/games?seasons[]=2022&dates[]={date_today}" (YYYY-MM-DD)
+
+Season series so far between the teams: 
+ - Make a call to "https://www.balldontlie.io/api/v1/games?seasons[]={current_season}&team_ids[]={team_id}&end_date={current_date}&per_page=82". This returns the games of the team and search for games against the opponent.
+
+Record of last 10 games between the teams:
+ - Make call to "https://www.balldontlie.io/api/v1/games?seasons[]={current_season}&team_ids[]={team_id}&end_date={current_date}&per_page=82"and decrement year until 10 games between teams
+
+Each teams rankings in statistical categories:
+ - Make call to "https://stats.nba.com/stats/leaguedashteamstats?DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2022-23&SeasonSegment=&SeasonType=Regular%20Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=0&VsConference=&VsDivision="
+ - Need to copy the same headers
+
+Injuries in the matchup:
+ - Need team abbrev. Can hardcode them.
+ - Make call to "https://www.rotowire.com/basketball/tables/injury-report.php?team={team_abrv}&pos=ALL"
+
+Current betting lines:
+ - Get game IDs from "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json"
+ - Make a call to "https://cdn.nba.com/static/json/liveData/odds/odds_todaysGames.json" and filter for game IDs from previous
+ - Uses FanDuel, but doesn't have O/U
+
+Each teams last 10 games record:
+
+Player's performance against matchup:
+ - Get player ID
+ - Loop through games to get dates of last matchups
+ - Make call to "https://www.balldontlie.io/api/v1/stats?seasons[]=2022&player_ids[]=17896055&dates[]=2022-12-09&dates[]=2022-12-11"
+
+Utils
+ - NBA player info including player ids: https://data.nba.net/10s/prod/v1/2022/players.json
+ - Easy to read team data: https://github.com/bttmly/nba/blob/master/data/teams.json
+ - Some stats.nba.com documentation: https://github.com/seemethere/nba_py/wiki/stats.nba.com-Endpoint-Documentation#leaguedashplayerstats
+
+
+
+Implementation:
+
+ - React app maybe, look into Next.js for server-side scripting
+ - Host on AWS, run node on EC2 instance
