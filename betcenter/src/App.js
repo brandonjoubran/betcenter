@@ -14,7 +14,7 @@ import {
   CardHeader,
 } from '@material-ui/core';
 
-team_data = {
+/*team_data = {
   '1610612765': {
     'name': 'Detroit Pistons',
     'balldontlie_id': '9',
@@ -30,12 +30,12 @@ team_data = {
     'balldontlie_id': '25',
     'espn_abbrev': 'por'
   }, 
-}
+}*/
 
 function team_abbrev(id){
-    if (id == 29){
+    if (id == "UTA"){
       return 'UTAH'
-    } else if (id == 19){
+    } else if (id == "NOP"){
       return 'NO'
     }
 
@@ -48,7 +48,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        'https://www.balldontlie.io/api/v1/games?seasons[]=2022&dates[]=20230107',
+        '/all',
       );
       setGames(result.data.data);
     };
@@ -56,7 +56,7 @@ function App() {
   }, []);
 
 
-
+  console.log(games)
   return (
     <Paper>
       <Typography variant="h4" component="h4" align="center" gutterBottom>
@@ -65,25 +65,25 @@ function App() {
       <Table>
       <TableBody>
         {games.map(game => (
-          <TableRow key={game.id} hover>
+          <TableRow key={game.gameId} hover>
             <TableCell>
               <Box>
-              <Link href="#" component={Box} display="flex" alignItems="center">
+              <Link to={`/game/${game.id}`} component={Box} display="flex" alignItems="center">
               <CardHeader
                 avatar={
                   <Avatar
-                    src={ `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${game.home_team.abbreviation}.png`}
+                    src={ `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${game.homeTeam.teamTricode}.png`}
                   />
                 }
-                title={`${game.home_team.full_name} (-200) @`}
+                title={`${game.homeTeam.fullname} (${game.betting[0].odds}) @`}
               />
               <CardHeader
                 avatar={
                   <Avatar
-                  src={!team_abbrev(game.visitor_team.id) ? `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${game.visitor_team.abbreviation}.png` : `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${team_abbrev(game.visitor_team.id)}.png`}
+                  src={!team_abbrev(game.awayTeam.teamTricode) ? `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${game.awayTeam.teamTricode}.png` : `https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/${team_abbrev(game.awayTeam.teamTricode)}.png`}
                   />
                 }
-                title={`${game.visitor_team.full_name} (-200)`}
+                title={`${game.awayTeam.fullname} (${game.betting[1].odds})`}
               />
               </Link>
 
@@ -94,7 +94,7 @@ function App() {
               {game.status}
               </TableRow>
               <TableRow>
-              {`${game.home_team_score} - ${game.visitor_team_score}`}
+              {`${game.homeTeam.score} - ${game.awayTeam.score}`}
               </TableRow>
               </TableCell>
           </TableRow>
