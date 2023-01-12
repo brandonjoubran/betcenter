@@ -19,8 +19,9 @@ function get_date() {
 
 }
 
-function create_array(games) {
+function create_array(games, betting) {
   resp = []
+  console.log(betting)
   games.map( game =>  {
     dict = {}
     dict['gameId'] = game.gameId
@@ -29,9 +30,10 @@ function create_array(games) {
     dict['homeTeam']['fullname'] = game.homeTeam.teamCity + ' ' + game.homeTeam.teamName
     dict['awayTeam'] = game.awayTeam
     dict['awayTeam']['fullname'] = game.awayTeam.teamCity + ' ' + game.awayTeam.teamName
+    dict['betting'] = betting[game.gameId]
     resp.push(dict)
   })
-
+  console.log(resp)
   return resp
 
 }
@@ -58,6 +60,50 @@ function get_odds(val, values) {
   })
 }
 
+app.get("/all", (req, resp) => {
+
+  betting = {}
+  get_odds()
+  .then(res => {
+    test = ['0022200598', '0022200597', '0022200598', '0022200599', '0022200600', '0022200601']
+
+    filter = res.games.filter(game => test.includes(game.gameId))
+
+    id = ''
+    res.games.forEach(game => {
+      console.log(game)
+      id = game.gameId
+      game.markets = game.markets.filter(market => market.name == "2way")
+      game.markets.forEach( market => {
+        market.books = market.books.filter(book => book.name === 'FanDuel')
+        console.log('here')
+        console.log(id)
+        if(market.books.length > 0){
+          betting[id] = market.books[0].outcomes
+        }
+      })
+    })
+          
+          
+      console.log(res.games)
+      return get_scoreboard()
+    //resp.json({ message: dict})
+  })
+  .then(res2 => {
+    
+    resp.json({ data: create_array(res2.scoreboard.games, betting)})
+    console.log(get_date())
+  })
+
+
+
+  /*get_scoreboard()
+  .then(res => {
+    resp.json({ message: create_array(res.scoreboard.games)})
+    console.log(get_date())
+  })*/
+});
+
 app.get("/scoreboard", (req, resp) => {
   get_scoreboard()
   .then(res => {
@@ -78,6 +124,7 @@ app.get("/bet", (req, resp) => {
     res.games.forEach(game => {
       console.log(game)
       id = game.gameId
+      game.markets = game.markets.filter(market => market.name == "2way")
       game.markets.forEach( market => {
         market.books = market.books.filter(book => book.name === 'FanDuel')
         console.log('here')
