@@ -8,6 +8,7 @@ Plan:
   - Take advantage of AWS services to achieve scalability, including ElastiCache (Redis), APIGateway, EC2, etc.
   - Home page shows a table of today's NBA matchups, and when you click one it brings user to a page shows further data about the matchup
   - Can cache the data from these pages to reduce API calls to other servers
+  - Show your fantasy sports players in each matchup with data such as how they perform in that matchup
 
 Data planning to include: 
   - Season series so far between the teams

@@ -8,33 +8,13 @@ import {
   TableRow,
   Paper,
   Typography,
-  Link,
   Box,
   Avatar,
   CardHeader,
 } from '@material-ui/core';
-import { BrowserRouter, Route , Routes} from "react-router-dom";
-import GameInfo from './GameInfo';
-import GameTable from './components/GameTable';
+import { BrowserRouter, Route , Routes, Link} from "react-router-dom";
+import GameInfo from '../GameInfo';
 
-
-/*team_data = {
-  '1610612765': {
-    'name': 'Detroit Pistons',
-    'balldontlie_id': '9',
-    'espn_abbrev': 'det'
-  }, 
-  '1610612755': {
-    'name': 'Philadelphia 76ers',
-    'balldontlie_id': '23',
-    'espn_abbrev': 'phi'
-  }, 
-  '1610612757': {
-    'name': 'Portland Trail Blazers',
-    'balldontlie_id': '25',
-    'espn_abbrev': 'por'
-  }, 
-}*/
 
 function team_abbrev(id){
     if (id == "UTA"){
@@ -46,24 +26,31 @@ function team_abbrev(id){
     return false
 }
 
-function App() {
-  const [games, setGames] = useState([]);
+function GameTable() {
+    const [games, setGames] = useState([]);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        const result = await axios(
+          '/all',
+        );
+        setGames(result.data.data);
+      };
+      fetchData();
+    }, []);
+  
+  
+    console.log(games)
+    console.log(games.length > 0)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        '/all',
-      );
-      setGames(result.data.data);
-    };
-    fetchData();
-  }, []);
+    //console.log(games[0])
+    if(games.length > 0) {
+    return (
+        <div>
 
-
-  //console.log(games)
-  return (
-    /*<Router>
-      <Paper>
+        <Paper>
+        
+      
         <Typography variant="h4" component="h4" align="center" gutterBottom>
           Today's NBA Games
         </Typography>
@@ -72,8 +59,9 @@ function App() {
           {games.map(game => (
             <TableRow key={game.gameId} hover>
               <TableCell>
+              <Link to={`/game/${game.gameId}`} state={{ from: game }} component={Box} display="flex" alignItems="center">
+
                 <Box>
-                <Link to={`/about`} component={Box} display="flex" alignItems="center">
                 <CardHeader
                   avatar={
                     <Avatar
@@ -90,9 +78,10 @@ function App() {
                   }
                   title={`${game.awayTeam.fullname} (${game.betting[1].odds})`}
                 />
+  
+                </Box>
                 </Link>
 
-                </Box>
               </TableCell>
               <TableCell>
                 <TableRow>
@@ -106,14 +95,10 @@ function App() {
           ))}
         </TableBody>
       </Table>
-      <Route path="/about"  component={GameInfo} />
       </Paper>
-    </Router>*/
-        <Routes>
-          <Route path="/" element={<GameTable />} />
-          <Route path="/game/:id" element={<GameInfo/>} />
-        </Routes>
-  );
-}
 
-export default App;
+      </div>
+    );}
+  }
+
+export default GameTable;

@@ -1,0 +1,44 @@
+.team-card {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+    margin-bottom: 20px;
+    }
+    
+    .team-card h2 {
+    margin: 0;
+    }
+    
+    .team-card-item {
+    margin-top: 10px;
+    font-size: 16px;
+    }
+    
+    .team-card-value {
+    font-weight: bold;
+    }
+    
+    .team-card-divider {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+    }
+    
+    .top-player {
+    margin-top: 20px;
+    }
+    
+    .top-player h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    }
+    
+    .last-5-games {
+    margin-top: 20px;
+    }
+    
+    .last-5-games h4 {
+    margin: 0;
+    margin-bottom: 10px;
+    }
